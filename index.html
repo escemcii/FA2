@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canteen Order</title>
+</head>
+<body>
+
+<h2>Canteen Pre-Order Form</h2>
+
+<form onsubmit="return printReceipt()">
+
+    <!-- Full Name -->
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" required><br><br>
+
+    <!-- Grade and Section -->
+    <label for="section">Grade & Section:</label>
+    <input type="text" id="section" required><br><br>
+
+    <!-- Food -->
+    <label for="meal">Food:</label>
+    <select id="meal">
+        <option>Chicken meal (₱75)</option>
+        <option>Pork meal (₱85)</option>
+        <option>Beef meal (₱105)</option>
+    </select><br><br>
+
+    <!-- Quantity -->
+    <label for="qty">Quantity (max of 5):</label>
+    <input type="number" id="qty" min="1" max="5" required><br><br>
+
+    <!-- Customer -->
+    <label for="custType">Customer:</label>
+    <select id="custType">
+        <option>Student</option>
+        <option>Faculty</option>
+    </select><br><br>
+
+    <!-- Submit -->
+    <input type="submit" value="Place Order">
+
+</form>
+
+<hr>
+
+<div id="output"></div>
+
+<script>
+
+// Calculate subtotal
+function calculateSubtotal(order, quantity) {
+
+    let price;
+
+    switch(order) {
+        case "Chicken meal (₱75)":
+            price = 75;
+            break;
+        case "Pork meal (₱85)":
+            price = 85;
+            break;
+        case "Beef meal (₱105)":
+            price = 105;
+            break;
+        default:
+            return 0;
+    }
+
+    return price * quantity;
+}
+
+// Calculate discount
+function calculateDiscount(total, type) {
+    if (type === "Student") {
+        return total * 0.20;
+    } else {
+        return 0;
+    }
+}
+
+// Print receipt
+function printReceipt() {
+
+    let name = document.getElementById("name").value;
+    let section = document.getElementById("section").value;
+    let meal = document.getElementById("meal").value;
+    let qty = document.getElementById("qty").value;
+    let type = document.getElementById("custType").value;
+
+    let subtotal = calculateSubtotal(meal, qty);
+    let discount = calculateDiscount(subtotal, type);
+    let total = subtotal - discount;
+
+    document.getElementById("output").innerHTML = `
+        <h3>Order Receipt</h3>
+        Full Name: ${name} <br>
+        Grade & Section: ${section} <br>
+        Food: ${meal} <br>
+        Quantity: ${qty} <br>
+        Customer: ${type} <br><br>
+
+        Subtotal: ₱${subtotal} <br>
+        Discount: ₱${discount} <br>
+        <b>Total: ₱${total}</b>
+    `;
+
+    return false;
+}
+
+</script>
+
+</body>
+</html>
